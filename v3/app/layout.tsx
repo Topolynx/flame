@@ -2,6 +2,10 @@ import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 
 import { Providers } from '@/components/providers/Providers';
+import { listThemes } from '@/db/queries/themes';
+import { getMergedConfig } from '@/lib/mergedConfig';
+import { readPreferredLocalThemeCookie } from '@/lib/themeCookie';
+import { buildRootThemeCss, resolveActiveTheme } from '@/lib/themes';
 
 import './globals.css';
 
@@ -35,10 +39,24 @@ export const viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const defaultThemeName = getMergedConfig().defaultTheme;
+  const preferredLocalTheme = await readPreferredLocalThemeCookie();
+  const customThemes = listThemes().filter(theme => theme.isCustom);
+
+  const activeTheme = resolveActiveTheme({
+    themeName: preferredLocalTheme ?? '',
+    defaultThemeName,
+    customThemes,
+  });
+
   return (
-    <html lang="en" className={roboto.variable}>
+    <html lang="en" className={roboto.variable} data-theme={activeTheme.name}>
       <body>
+        <style
+          data-flame="active-theme"
+          dangerouslySetInnerHTML={{ __html: buildRootThemeCss(activeTheme.colors) }}
+        />
         <Providers>{children}</Providers>
       </body>
     </html>

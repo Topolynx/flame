@@ -27,4 +27,8 @@ export const initDatabase = async (options: InitOptions = {}): Promise<void> => 
 
     runMigrations();
   }
+
+  const { seedBuiltInThemes } = await import('./queries/themes');
+
+  seedBuiltInThemes();
 };

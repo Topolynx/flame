@@ -3,38 +3,35 @@
 import { revalidatePath } from 'next/cache';
 
 import { readGlobalConfigJson, writeGlobalConfigJson } from '@/db/queries/globalConfig';
-import { isAuthenticated } from '@/lib/auth';
 import { globalOverridesSchema } from '@/lib/config';
 import { validateConfigUpdate } from '@/lib/config-validateUpdate';
 import { configLog } from '@/lib/logger';
+import { requireAuth } from '@/lib/requireAuth';
 
 export type UpdateGlobalConfigResult = { success: boolean; message: string };
 
-export const updateGlobalConfig = async (
-  updatedConfigKeys: unknown,
-): Promise<UpdateGlobalConfigResult> => {
-  const isUserAuthenticated = await isAuthenticated();
+export const updateGlobalConfig = requireAuth(
+  async (updatedConfigKeys: unknown): Promise<UpdateGlobalConfigResult> => {
+    const currentConfig = readGlobalConfigJson();
+    const validationResult = validateConfigUpdate({
+      updatedConfigKeys,
+      currentConfig,
+      schema: globalOverridesSchema,
+    });
 
-  if (!isUserAuthenticated) {
-    return { success: false, message: 'Not authenticated' };
-  }
+    if (!validationResult.success) {
+      return { success: false, message: validationResult.message };
+    }
 
-  const currentConfig = readGlobalConfigJson();
-  const validationResult = validateConfigUpdate({
-    updatedConfigKeys,
-    currentConfig,
-    schema: globalOverridesSchema,
-  });
+    writeGlobalConfigJson(validationResult.newConfig);
 
-  if (!validationResult.success) {
-    return { success: false, message: validationResult.message };
-  }
+    configLog.info(
+      { keys: Object.keys(validationResult.validatedConfig) },
+      'global config updated',
+    );
 
-  writeGlobalConfigJson(validationResult.newConfig);
+    revalidatePath('/', 'layout');
 
-  configLog.info({ keys: Object.keys(validationResult.validatedConfig) }, 'global config updated');
-
-  revalidatePath('/', 'layout');
-
-  return { success: true, message: validationResult.message };
-};
+    return { success: true, message: validationResult.message };
+  },
+);

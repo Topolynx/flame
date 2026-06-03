@@ -11,6 +11,7 @@ import { useToast } from '@/components/toast/ToastProvider';
 import { Button } from '@/components/ui/Button';
 import type { MergedConfig, GlobalConfigOnlyKey, UnvalidatedConfig } from '@/lib/config';
 import { useFormStateUpdater } from '@/hooks/useFormStateUpdater';
+import { useServerAction } from '@/hooks/useServerAction';
 
 type Props = {
   initialConfig: MergedConfig;
@@ -61,8 +62,8 @@ const EXPECTED_STRING_SCHEMA_LENGTHS: Record<
 
 export const GeneralForm = ({ initialConfig, envLockedKeys }: Props) => {
   const [formState, setFormState] = useState<FormState>(() => buildInitialState(initialConfig));
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const toast = useToast();
+  const { isSubmitting, runServerAction } = useServerAction();
 
   const updateState = useFormStateUpdater(setFormState);
 
@@ -138,21 +139,7 @@ export const GeneralForm = ({ initialConfig, envLockedKeys }: Props) => {
       return;
     }
 
-    setIsSubmitting(true);
-
-    try {
-      const { success, message } = await updateGlobalConfig(buildResult.payload);
-
-      if (success) {
-        toast.success(message);
-      } else {
-        toast.error(message);
-      }
-    } catch {
-      toast.error('Failed to save settings');
-    } finally {
-      setIsSubmitting(false);
-    }
+    await runServerAction(() => updateGlobalConfig(buildResult.payload));
   };
 
   return (

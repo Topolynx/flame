@@ -1,0 +1,21 @@
+.section {
+  margin-bottom: 30px;
+}
+
+.buttonsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.payloadTextarea {
+  width: 100%;
+  min-height: 140px;
+  margin-top: 10px;
+  font-family: monospace;
+  background-color: var(--color-background);
+  color: var(--color-primary);
+  border: 1px solid var(--color-accent);
+  padding: 8px;
+}

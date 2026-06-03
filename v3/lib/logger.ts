@@ -59,6 +59,7 @@ export const workspaceLog = log.child({ domain: 'workspace' });
 export const appsLog = log.child({ domain: 'apps' });
 export const bookmarksLog = log.child({ domain: 'bookmarks' });
 export const categoriesLog = log.child({ domain: 'categories' });
+export const themesLog = log.child({ domain: 'themes' });
 export const searchLog = log.child({ domain: 'search' });
 export const weatherLog = log.child({ domain: 'weather' });
 export const healthLog = log.child({ domain: 'health' });
