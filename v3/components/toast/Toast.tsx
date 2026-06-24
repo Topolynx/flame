@@ -3,6 +3,7 @@
 import { mdiAlert, mdiAlertCircle, mdiCheckCircle, mdiClose, mdiInformation } from '@mdi/js';
 import { useEffect, useRef, type MouseEvent } from 'react';
 
+import { Icon } from '@/components/ui/Icon';
 import styles from './Toast.module.css';
 import type { ToastRecord, ToastType } from './types';
 
@@ -125,9 +126,7 @@ export const Toast = ({ toast, onDismiss, onRemove }: Props) => {
       onClick={isInteractive ? handleBodyClick : undefined}
       onAnimationEnd={handleAnimationEnd}
     >
-      <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">
-        <path d={ICONS[type]} />
-      </svg>
+      <Icon className={styles.icon} path={ICONS[type]} />
 
       <div className={styles.body}>
         {title ? <h4 className={styles.title}>{title}</h4> : null}
@@ -141,9 +140,7 @@ export const Toast = ({ toast, onDismiss, onRemove }: Props) => {
         aria-label="Dismiss notification"
         onClick={handleClose}
       >
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d={mdiClose} />
-        </svg>
+        <Icon path={mdiClose} />
       </button>
     </div>
   );

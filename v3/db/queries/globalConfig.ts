@@ -2,24 +2,10 @@ import { eq } from 'drizzle-orm';
 
 import { db, type DbClient } from '@/db';
 import { globalConfig } from '@/db/schema/globalConfig';
-import type { UnvalidatedConfig } from '@/lib/config';
+import { parseUnvalidatedConfigJson, type UnvalidatedConfig } from '@/lib/config';
 import { configLog } from '@/lib/logger';
 
 export const GLOBAL_CONFIG_ID = 1;
-
-const safeParseJson = (configString: string): UnvalidatedConfig => {
-  try {
-    const parsed = JSON.parse(configString) as unknown;
-
-    if (parsed !== null && typeof parsed === 'object' && !Array.isArray(parsed)) {
-      return parsed as UnvalidatedConfig;
-    }
-  } catch (err) {
-    configLog.warn({ err }, 'global_config row contained invalid JSON; treating as empty');
-  }
-
-  return {};
-};
 
 export const readGlobalConfigJson = (client: DbClient = db): UnvalidatedConfig => {
   const row = client
@@ -32,7 +18,10 @@ export const readGlobalConfigJson = (client: DbClient = db): UnvalidatedConfig =
     return {};
   }
 
-  return safeParseJson(row.configJson);
+  return parseUnvalidatedConfigJson(row.configJson, {
+    log: configLog,
+    message: 'global_config row contained invalid JSON; treating as empty',
+  });
 };
 
 export const writeGlobalConfigJson = (

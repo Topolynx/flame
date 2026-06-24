@@ -7,4 +7,5 @@ export type SettingsNavItem = {
 export const settingsNavItems: SettingsNavItem[] = [
   { name: 'General', href: '/settings/general' },
   { name: 'Themes', href: '/settings/themes' },
+  { name: 'Workspaces', href: '/settings/workspaces' },
 ];

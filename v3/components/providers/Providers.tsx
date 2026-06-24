@@ -3,12 +3,20 @@
 import type { ReactNode } from 'react';
 
 import { ToastProvider } from '../toast/ToastProvider';
+import { AuthProvider } from './AuthProvider';
 import { QueryProvider } from './QueryProvider';
 
-export const Providers = ({ children }: { children: ReactNode }) => {
+type Props = {
+  isAuthenticated: boolean;
+  children: ReactNode;
+};
+
+export const Providers = ({ isAuthenticated, children }: Props) => {
   return (
     <QueryProvider>
-      <ToastProvider>{children}</ToastProvider>
+      <AuthProvider isAuthenticated={isAuthenticated}>
+        <ToastProvider>{children}</ToastProvider>
+      </AuthProvider>
     </QueryProvider>
   );
 };

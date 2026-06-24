@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { cache } from 'react';
 
 import { verifySession } from './jwt';
 
@@ -13,7 +14,7 @@ export const ADMIN_USER: User = { id: 1, role: 'admin' };
 
 export const isAuthDisabled = (): boolean => process.env.AUTH_DISABLED === 'true';
 
-export const getCurrentUser = async (): Promise<User | null> => {
+const readCurrentUser = async (): Promise<User | null> => {
   if (isAuthDisabled()) {
     return ADMIN_USER;
   }
@@ -32,6 +33,8 @@ export const getCurrentUser = async (): Promise<User | null> => {
 
   return ADMIN_USER;
 };
+
+export const getCurrentUser = cache(readCurrentUser);
 
 export const isAuthenticated = async (): Promise<boolean> => {
   return (await getCurrentUser()) !== null;

@@ -94,6 +94,33 @@ export type GlobalOverrides = z.infer<typeof globalOverridesSchema>;
 export type UnvalidatedConfig = Record<string, unknown>;
 export type MutableConfig = Record<string, unknown>;
 
+type ConfigJsonLogger = {
+  warn: (context: Record<string, unknown>, message: string) => void;
+};
+
+type ParseUnvalidatedConfigJsonOptions = {
+  log: ConfigJsonLogger;
+  message: string;
+  context?: Record<string, unknown>;
+};
+
+export const parseUnvalidatedConfigJson = (
+  configJson: string,
+  { log, message, context }: ParseUnvalidatedConfigJsonOptions,
+): UnvalidatedConfig => {
+  try {
+    const parsed = JSON.parse(configJson) as unknown;
+
+    if (parsed !== null && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      return parsed as UnvalidatedConfig;
+    }
+  } catch (err) {
+    log.warn({ ...context, err }, message);
+  }
+
+  return {};
+};
+
 export type ConfigKey = keyof MergedConfig;
 export type WorkspaceOverridableKey = keyof z.infer<typeof workspaceOverridableSchema>;
 export type GlobalConfigOnlyKey = Exclude<ConfigKey, WorkspaceOverridableKey>;

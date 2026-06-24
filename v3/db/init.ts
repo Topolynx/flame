@@ -31,4 +31,8 @@ export const initDatabase = async (options: InitOptions = {}): Promise<void> => 
   const { seedBuiltInThemes } = await import('./queries/themes');
 
   seedBuiltInThemes();
+
+  const { seedDefaultWorkspace } = await import('./queries/workspaces');
+
+  seedDefaultWorkspace();
 };

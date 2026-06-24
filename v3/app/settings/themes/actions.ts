@@ -14,7 +14,12 @@ import { globalOverridesSchema } from '@/lib/config';
 import { validateConfigUpdate } from '@/lib/config-validateUpdate';
 import { themesLog } from '@/lib/logger';
 import { requireAuth } from '@/lib/requireAuth';
-import { writePreferredLocalThemeCookie } from '@/lib/themeCookie';
+import type { ServerActionResult } from '@/lib/serverAction';
+import {
+  clearPreferredLocalThemeCookie,
+  writeFollowWorkspaceThemeCookie,
+  writePreferredLocalThemeCookie,
+} from '@/lib/themeCookie';
 import {
   isBuiltInThemeName,
   themeColorsSchema,
@@ -25,13 +30,11 @@ import {
   type ThemeImportEntry,
 } from '@/lib/themes';
 
-export type ActionResult = { success: boolean; message: string };
-
 const ErrorResults = {
   INVALID_THEME_NAME: { success: false, message: 'Invalid theme name' },
   INVALID_COLORS: { success: false, message: 'Invalid colors' },
   THEME_NOT_FOUND: { success: false, message: 'Theme not found' },
-  themeAlreadyExists: (name: string): ActionResult => ({
+  themeAlreadyExists: (name: string): ServerActionResult => ({
     success: false,
     message: `A theme named "${name}" already exists`,
   }),
@@ -61,7 +64,7 @@ export type CreateThemePayload = {
 };
 
 export const createCustomTheme = requireAuth(
-  async (theme: CreateThemePayload): Promise<ActionResult> => {
+  async (theme: CreateThemePayload): Promise<ServerActionResult> => {
     const name = parseNameInput(theme.name);
     const colors = parseColorsInput(theme.colors);
 
@@ -92,7 +95,7 @@ export type UpdateThemePayload = CreateThemePayload & {
 };
 
 export const updateCustomTheme = requireAuth(
-  async (input: UpdateThemePayload): Promise<ActionResult> => {
+  async (input: UpdateThemePayload): Promise<ServerActionResult> => {
     const originalName = typeof input.originalName === 'string' ? input.originalName : null;
     const name = parseNameInput(input.name);
     const colors = parseColorsInput(input.colors);
@@ -129,7 +132,7 @@ export const updateCustomTheme = requireAuth(
   },
 );
 
-export const deleteCustomTheme = requireAuth(async (name: unknown): Promise<ActionResult> => {
+export const deleteCustomTheme = requireAuth(async (name: unknown): Promise<ServerActionResult> => {
   if (typeof name !== 'string' || name.length === 0) {
     return ErrorResults.INVALID_THEME_NAME;
   }
@@ -153,7 +156,34 @@ export const deleteCustomTheme = requireAuth(async (name: unknown): Promise<Acti
   return { success: true, message: 'Theme deleted' };
 });
 
-export const setPreferredLocalTheme = async (themeName: unknown): Promise<ActionResult> => {
+export const clearPreferredLocalTheme = async (): Promise<ServerActionResult> => {
+  await clearPreferredLocalThemeCookie();
+
+  themesLog.info('preferred theme cookie cleared');
+
+  revalidateThemedLayout();
+
+  return { success: true, message: 'Local theme cleared' };
+};
+
+export const setFollowWorkspaceTheme = async (follow: unknown): Promise<ServerActionResult> => {
+  if (typeof follow !== 'boolean') {
+    return { success: false, message: 'Invalid value' };
+  }
+
+  await writeFollowWorkspaceThemeCookie(follow);
+
+  themesLog.info({ follow }, 'follow-workspace-theme cookie updated');
+
+  revalidateThemedLayout();
+
+  return {
+    success: true,
+    message: follow ? 'Following workspace themes' : 'Using your local theme',
+  };
+};
+
+export const setPreferredLocalTheme = async (themeName: unknown): Promise<ServerActionResult> => {
   if (typeof themeName !== 'string') {
     return ErrorResults.INVALID_THEME_NAME;
   }
@@ -171,36 +201,38 @@ export const setPreferredLocalTheme = async (themeName: unknown): Promise<Action
   return { success: true, message: 'Theme applied' };
 };
 
-export const setDefaultTheme = requireAuth(async (themeName: unknown): Promise<ActionResult> => {
-  if (typeof themeName !== 'string') {
-    return ErrorResults.INVALID_THEME_NAME;
-  }
+export const setDefaultTheme = requireAuth(
+  async (themeName: unknown): Promise<ServerActionResult> => {
+    if (typeof themeName !== 'string') {
+      return ErrorResults.INVALID_THEME_NAME;
+    }
 
-  if (!isBuiltInThemeName(themeName) && getThemeByName(themeName) === null) {
-    return ErrorResults.THEME_NOT_FOUND;
-  }
+    if (!isBuiltInThemeName(themeName) && getThemeByName(themeName) === null) {
+      return ErrorResults.THEME_NOT_FOUND;
+    }
 
-  const currentConfig = readGlobalConfigJson();
-  const validationResult = validateConfigUpdate({
-    updatedConfigKeys: { defaultTheme: themeName },
-    currentConfig,
-    schema: globalOverridesSchema,
-  });
+    const currentConfig = readGlobalConfigJson();
+    const validationResult = validateConfigUpdate({
+      updatedConfigKeys: { defaultTheme: themeName },
+      currentConfig,
+      schema: globalOverridesSchema,
+    });
 
-  if (!validationResult.success) {
-    return { success: false, message: validationResult.message };
-  }
+    if (!validationResult.success) {
+      return { success: false, message: validationResult.message };
+    }
 
-  writeGlobalConfigJson(validationResult.newConfig);
+    writeGlobalConfigJson(validationResult.newConfig);
 
-  themesLog.info({ themeName }, 'set default theme');
+    themesLog.info({ themeName }, 'set default theme');
 
-  revalidateThemedLayout();
+    revalidateThemedLayout();
 
-  return { success: true, message: 'Default theme saved' };
-});
+    return { success: true, message: 'Default theme saved' };
+  },
+);
 
-export type ImportThemesResult = ActionResult & { imported?: number; skipped?: string[] };
+export type ImportThemesResult = ServerActionResult & { imported?: number; skipped?: string[] };
 
 const normalizeImportPayload = (parsed: unknown): ThemeImportEntry[] | null => {
   const result = themeImportPayloadSchema.safeParse(parsed);

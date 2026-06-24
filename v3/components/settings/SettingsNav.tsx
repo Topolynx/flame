@@ -4,15 +4,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import type { SettingsNavItem } from '@/app/settings/navItems';
+import { useAuth } from '@/components/providers/AuthProvider';
 import styles from './SettingsNav.module.css';
 
-type Props = {
-  items: SettingsNavItem[];
-  isAuthenticated: boolean;
-};
-
-export const SettingsNav = ({ items, isAuthenticated }: Props) => {
+export const SettingsNav = ({ items }: { items: SettingsNavItem[] }) => {
   const pathname = usePathname();
+  const { isAuthenticated } = useAuth();
   const visibleItems = isAuthenticated ? items : items.filter(item => !item.isAuthRequired);
 
   return (

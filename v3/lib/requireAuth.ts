@@ -1,6 +1,5 @@
 import { isAuthenticated } from './auth';
-
-type ServerActionResult = { success: boolean; message: string };
+import type { ServerActionResult } from './serverAction';
 
 const NOT_AUTHENTICATED = { success: false, message: 'Not authenticated' } as const;
 

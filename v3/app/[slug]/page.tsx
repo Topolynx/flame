@@ -1,20 +1,31 @@
 import { notFound } from 'next/navigation';
 
 import { WorkspacePage } from '@/components/workspaces/WorkspacePage';
-import { getDefaultWorkspace, listWorkspaces } from '@/db/queries/workspaces';
+import { getWorkspaceBySlug, listWorkspaces } from '@/db/queries/workspaces';
 import { isAuthenticated as _isAuthenticated } from '@/lib/auth';
 import { getActiveTheme } from '@/lib/activeTheme';
 import { getMergedConfig } from '@/lib/mergedConfig';
-import { filterVisibleWorkspaces } from '@/lib/workspaces';
+import { filterVisibleWorkspaces, isReservedWorkspaceSlug } from '@/lib/workspaces';
 
-export default async function HomePage() {
-  const workspace = getDefaultWorkspace();
+export default async function WorkspaceSlugPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+
+  if (isReservedWorkspaceSlug(slug)) {
+    notFound();
+  }
+
+  const workspace = getWorkspaceBySlug(slug);
 
   if (workspace === null) {
     notFound();
   }
 
   const isAuthenticated = await _isAuthenticated();
+
+  if (!workspace.isPublic && !isAuthenticated) {
+    notFound();
+  }
+
   const config = getMergedConfig(workspace.id);
   const visibleWorkspaces = filterVisibleWorkspaces(listWorkspaces(), isAuthenticated);
   const activeTheme = await getActiveTheme(workspace.id);

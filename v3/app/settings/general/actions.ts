@@ -7,11 +7,10 @@ import { globalOverridesSchema } from '@/lib/config';
 import { validateConfigUpdate } from '@/lib/config-validateUpdate';
 import { configLog } from '@/lib/logger';
 import { requireAuth } from '@/lib/requireAuth';
-
-export type UpdateGlobalConfigResult = { success: boolean; message: string };
+import type { ServerActionResult } from '@/lib/serverAction';
 
 export const updateGlobalConfig = requireAuth(
-  async (updatedConfigKeys: unknown): Promise<UpdateGlobalConfigResult> => {
+  async (updatedConfigKeys: unknown): Promise<ServerActionResult> => {
     const currentConfig = readGlobalConfigJson();
     const validationResult = validateConfigUpdate({
       updatedConfigKeys,

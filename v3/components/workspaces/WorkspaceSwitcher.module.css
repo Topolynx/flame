@@ -1,0 +1,92 @@
+.switcher {
+  position: fixed;
+  bottom: var(--spacing-ui);
+  right: var(--spacing-ui);
+  visibility: hidden;
+  z-index: 10;
+}
+
+.toggle {
+  width: 35px;
+  height: 35px;
+  background-color: var(--color-accent);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  opacity: 0.25;
+  transition: opacity 0.3s;
+}
+
+.toggle:hover,
+.toggle[aria-expanded='true'] {
+  opacity: 1;
+}
+
+.toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--color-background);
+}
+
+.popover {
+  position: absolute;
+  bottom: 45px;
+  right: 0;
+  min-width: 200px;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
+  padding: 8px 0;
+}
+
+.list {
+  list-style: none;
+}
+
+.item {
+  display: block;
+  padding: 8px 16px;
+  color: var(--color-primary);
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.item:hover {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+.itemActive {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 13px;
+}
+
+.footer {
+  border-top: 1px solid var(--color-accent);
+  margin-top: 4px;
+  padding-top: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.footerLink {
+  display: block;
+  padding: 6px 16px;
+  color: var(--color-primary);
+  font-size: 13px;
+  transition: background-color 0.3s;
+}
+
+.footerLink:hover {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+@media (min-width: 769px) {
+  .switcher {
+    visibility: visible;
+  }
+}

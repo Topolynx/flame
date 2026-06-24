@@ -3,8 +3,7 @@
 import { useState } from 'react';
 
 import { useToast } from '@/components/toast/ToastProvider';
-
-type ServerActionResult = { success: boolean; message: string };
+import type { ServerActionResult } from '@/lib/serverAction';
 
 type RunOptions<R extends ServerActionResult> = {
   onSuccess?: (result: R) => void;

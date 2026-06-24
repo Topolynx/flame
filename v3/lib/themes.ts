@@ -90,3 +90,31 @@ export const resolveActiveTheme = ({
 
   return findByName(themeName) ?? findByName(defaultThemeName) ?? findByName(FALLBACK_THEME_NAME)!;
 };
+
+export type WorkspaceThemeResolutionInput = {
+  preferredLocalTheme: string | null;
+  followWorkspaceTheme: boolean;
+  workspaceTheme: string | null;
+  globalDefaultTheme: string;
+};
+
+export const pickActiveThemeName = ({
+  preferredLocalTheme,
+  followWorkspaceTheme,
+  workspaceTheme,
+  globalDefaultTheme,
+}: WorkspaceThemeResolutionInput): string => {
+  if (followWorkspaceTheme && workspaceTheme) {
+    return workspaceTheme;
+  }
+
+  if (preferredLocalTheme) {
+    return preferredLocalTheme;
+  }
+
+  if (workspaceTheme) {
+    return workspaceTheme;
+  }
+
+  return globalDefaultTheme;
+};

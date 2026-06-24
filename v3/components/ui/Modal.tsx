@@ -3,6 +3,7 @@
 import { mdiClose } from '@mdi/js';
 import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react';
 
+import { Icon } from './Icon';
 import styles from './Modal.module.css';
 
 type Props = {
@@ -49,9 +50,7 @@ export const Modal = ({ isOpen, onClose, children }: Props) => {
     >
       <div className={styles.dialog}>
         <button type="button" className={styles.closeButton} onClick={onClose} aria-label="Close">
-          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-            <path d={mdiClose} fill="currentColor" />
-          </svg>
+          <Icon path={mdiClose} width={24} height={24} />
         </button>
         {children}
       </div>

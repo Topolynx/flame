@@ -3,14 +3,17 @@
 import { useState, type SyntheticEvent } from 'react';
 
 import {
+  clearPreferredLocalTheme,
   createCustomTheme,
   deleteCustomTheme,
   exportThemesJson,
   importThemesFromJson,
   setDefaultTheme,
+  setFollowWorkspaceTheme,
   setPreferredLocalTheme,
   updateCustomTheme,
 } from '@/app/settings/themes/actions';
+import { BooleanField } from '@/components/settings/BooleanField';
 import { SelectField } from '@/components/settings/SelectField';
 import { SettingsHeadline } from '@/components/settings/SettingsHeadline';
 import { useToast } from '@/components/toast/ToastProvider';
@@ -29,6 +32,8 @@ type Props = {
   activeThemeName: string;
   defaultThemeName: string;
   isAuthenticated: boolean;
+  hasLocalThemeOverride: boolean;
+  followWorkspaceTheme: boolean;
 };
 
 type ModalMode =
@@ -43,6 +48,8 @@ export const ThemesSettings = ({
   activeThemeName,
   defaultThemeName,
   isAuthenticated,
+  hasLocalThemeOverride,
+  followWorkspaceTheme,
 }: Props) => {
   const toast = useToast();
   const { isSubmitting, runServerAction } = useServerAction();
@@ -91,6 +98,14 @@ export const ThemesSettings = ({
   const handleSetDefaultTheme = async (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     await runServerAction(() => setDefaultTheme(pendingDefaultTheme));
+  };
+
+  const handleClearLocalTheme = async () => {
+    await runServerAction(() => clearPreferredLocalTheme());
+  };
+
+  const handleToggleFollowWorkspace = async (follow: boolean) => {
+    await runServerAction(() => setFollowWorkspaceTheme(follow), { silentOnSuccess: true });
   };
 
   const handleImportThemes = async () => {
@@ -145,6 +160,27 @@ export const ThemesSettings = ({
           </div>
         </>
       ) : null}
+
+      <SettingsHeadline>Your preferences</SettingsHeadline>
+      <div className={styles.section}>
+        <BooleanField
+          id="followWorkspaceTheme"
+          label="Follow per-workspace theme overrides"
+          value={followWorkspaceTheme}
+          onChange={handleToggleFollowWorkspace}
+          disabled={isSubmitting}
+        />
+        <p>
+          {hasLocalThemeOverride
+            ? 'Your local theme overrides the global default. Reset it to follow the admin-set default again.'
+            : 'You are following the admin-set default theme.'}
+        </p>
+        <div className={styles.buttonsRow}>
+          <Button onClick={handleClearLocalTheme} disabled={isSubmitting || !hasLocalThemeOverride}>
+            Reset to default theme
+          </Button>
+        </div>
+      </div>
 
       {isAuthenticated ? (
         <>

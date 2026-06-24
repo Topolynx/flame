@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
+import { headers } from 'next/headers';
 
 import { Providers } from '@/components/providers/Providers';
-import { listThemes } from '@/db/queries/themes';
-import { getMergedConfig } from '@/lib/mergedConfig';
-import { readPreferredLocalThemeCookie } from '@/lib/themeCookie';
-import { buildRootThemeCss, resolveActiveTheme } from '@/lib/themes';
+import { getWorkspaceBySlug } from '@/db/queries/workspaces';
+import { PATHNAME_HEADER } from '@/proxy';
+import { isAuthenticated as _isAuthenticated } from '@/lib/auth';
+import { getActiveTheme } from '@/lib/activeTheme';
+import { buildRootThemeCss } from '@/lib/themes';
+import { extractWorkspaceSlugFromPath } from '@/lib/workspaces';
 
 import './globals.css';
 
@@ -39,16 +42,23 @@ export const viewport = {
   initialScale: 1,
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const defaultThemeName = getMergedConfig().defaultTheme;
-  const preferredLocalTheme = await readPreferredLocalThemeCookie();
-  const customThemes = listThemes().filter(theme => theme.isCustom);
+const resolveInitialWorkspaceId = async (): Promise<number | null> => {
+  const pathname = (await headers()).get(PATHNAME_HEADER) ?? '';
+  const slug = extractWorkspaceSlugFromPath(pathname);
 
-  const activeTheme = resolveActiveTheme({
-    themeName: preferredLocalTheme ?? '',
-    defaultThemeName,
-    customThemes,
-  });
+  if (slug === null) {
+    return null;
+  }
+
+  const workspace = getWorkspaceBySlug(slug);
+
+  return workspace?.id ?? null;
+};
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const initialWorkspaceId = await resolveInitialWorkspaceId();
+  const activeTheme = await getActiveTheme(initialWorkspaceId);
+  const isAuthenticated = await _isAuthenticated();
 
   return (
     <html lang="en" className={roboto.variable} data-theme={activeTheme.name}>
@@ -57,7 +67,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           data-flame="active-theme"
           dangerouslySetInnerHTML={{ __html: buildRootThemeCss(activeTheme.colors) }}
         />
-        <Providers>{children}</Providers>
+        <Providers isAuthenticated={isAuthenticated}>{children}</Providers>
       </body>
     </html>
   );
