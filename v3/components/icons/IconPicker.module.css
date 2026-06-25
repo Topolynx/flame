@@ -1,0 +1,162 @@
+.field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.preview {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.preview svg {
+  width: 24px;
+  height: 24px;
+}
+
+.previewEmpty {
+  font-size: 12px;
+  color: var(--color-primary);
+  opacity: 0.5;
+}
+
+.trigger {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 6px 12px;
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.trigger:hover {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+.modalHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.modalTitle {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+  color: var(--color-primary);
+}
+
+.searchInput {
+  width: 100%;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 8px 12px;
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: var(--color-primary);
+  opacity: 0.5;
+}
+
+.statusRow {
+  font-size: 12px;
+  color: var(--color-primary);
+  opacity: 0.7;
+  display: flex;
+  justify-content: space-between;
+}
+
+.scroller {
+  height: 50vh;
+  min-height: 320px;
+  max-height: 600px;
+  overflow-y: auto;
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.virtualContainer {
+  position: relative;
+  width: 100%;
+}
+
+.row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  width: 100%;
+  gap: 4px;
+}
+
+.iconButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  aspect-ratio: 1;
+  padding: 6px 4px;
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  overflow: hidden;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+}
+
+.iconButton:hover,
+.iconButton:focus-visible {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.iconButton[data-selected='true'] {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+.iconButton svg {
+  width: 28px;
+  height: 28px;
+}
+
+.iconLabel {
+  width: 100%;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--color-primary);
+  opacity: 0.7;
+}

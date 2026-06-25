@@ -69,6 +69,7 @@ export const k8sLog = log.child({ domain: 'k8s' });
 export const versionLog = log.child({ domain: 'version' });
 export const migrationLog = log.child({ domain: 'migration' });
 export const uploadLog = log.child({ domain: 'upload' });
+export const iconsLog = log.child({ domain: 'icons' });
 
 export type BootBannerContext = {
   version: string;
