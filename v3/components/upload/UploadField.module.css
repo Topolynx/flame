@@ -1,0 +1,15 @@
+.uploadField {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fileInput {
+  display: none;
+}
+
+.currentValue {
+  color: var(--color-primary);
+  font-size: 14px;
+  word-break: break-all;
+}
