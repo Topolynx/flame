@@ -40,17 +40,20 @@ Flame is self-hosted startpage for your server. Its design is inspired (heavily)
 
 ### With Docker (recommended)
 
-This fork does not currently publish official Docker Hub images. Build the image locally:
+Docker Hub image:
 
 ```sh
-docker build -t flame-local:2.5.0-topolynx.1 -f .docker/Dockerfile .
+docker pull luciobt/flame:2.5.0
+
+# or follow the latest published build
+docker pull luciobt/flame:latest
 ```
 
 #### Deployment
 
 ```sh
 # run container
-docker run -p 5005:5005 -v /path/to/data:/app/data -e PASSWORD=change_me flame-local:2.5.0-topolynx.1
+docker run -p 5005:5005 -v /path/to/data:/app/data -e PASSWORD=change_me luciobt/flame:2.5.0
 ```
 
 #### Building images
@@ -74,7 +77,7 @@ version: '3.6'
 
 services:
   flame:
-    image: flame-local:2.5.0-topolynx.1
+    image: luciobt/flame:2.5.0
     container_name: flame
     volumes:
       - /path/to/host/data:/app/data
