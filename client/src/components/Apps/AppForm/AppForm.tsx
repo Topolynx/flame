@@ -4,7 +4,7 @@ import { NewApp } from '../../../interfaces';
 
 import classes from './AppForm.module.css';
 
-import { ModalForm, InputGroup, Button } from '../../UI';
+import { ModalForm, InputGroup, Button, IconPicker } from '../../UI';
 import { inputHandler, newAppTemplate } from '../../../utility';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../../../store';
@@ -170,6 +170,16 @@ export const AppForm = ({ modalHandler }: Props): JSX.Element => {
               Click here for reference
             </a>
           </span>
+          <IconPicker
+            value={formData.icon}
+            onChange={(icon) => {
+              setCustomIcon(null);
+              setFormData({
+                ...formData,
+                icon,
+              });
+            }}
+          />
           <span
             onClick={() => toggleUseCustomIcon(!useCustomIcon)}
             className={classes.Switch}
@@ -187,7 +197,7 @@ export const AppForm = ({ modalHandler }: Props): JSX.Element => {
             id="icon"
             required
             onChange={(e) => fileChangeHandler(e)}
-            accept=".jpg,.jpeg,.png,.svg,.ico"
+            accept=".jpg,.jpeg,.png,.svg,.webp,.ico"
           />
           <span
             onClick={() => {

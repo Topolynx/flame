@@ -26,6 +26,11 @@
       "authRequired": true
     },
     {
+      "name": "Icons",
+      "dest": "/settings/icons",
+      "authRequired": true
+    },
+    {
       "name": "CSS",
       "dest": "/settings/css",
       "authRequired": true

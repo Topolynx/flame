@@ -1,5 +1,6 @@
 import classes from './Icon.module.css';
 
+import { useEffect, useState } from 'react';
 import { Icon as MDIcon } from '@mdi/react';
 
 interface Props {
@@ -7,13 +8,44 @@ interface Props {
   color?: string;
 }
 
+type MDIcons = typeof import('@mdi/js');
+
+let iconsPromise: Promise<MDIcons> | null = null;
+
+const loadIcons = () => {
+  if (!iconsPromise) {
+    iconsPromise = import('@mdi/js');
+  }
+
+  return iconsPromise;
+};
+
 export const Icon = (props: Props): JSX.Element => {
-  const MDIcons = require('@mdi/js');
-  let iconPath = MDIcons[props.icon];
+  const [iconPath, setIconPath] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+
+    loadIcons().then((MDIcons) => {
+      let path = MDIcons[props.icon as keyof MDIcons];
+
+      if (!path) {
+        console.log(`Icon ${props.icon} not found`);
+        path = MDIcons.mdiCancel;
+      }
+
+      if (isMounted) {
+        setIconPath(path);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [props.icon]);
 
   if (!iconPath) {
-    console.log(`Icon ${props.icon} not found`);
-    iconPath = MDIcons.mdiCancel;
+    return <span className={classes.Icon}></span>;
   }
 
   return (

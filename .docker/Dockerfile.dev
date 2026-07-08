@@ -1,4 +1,4 @@
-FROM node:lts-alpine as build-front
+FROM node:lts-alpine AS build-front
 
 RUN apk add --no-cache curl
 
@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY ./client .
 
-RUN npm install --production \
+RUN npm ci \
     && npm run build
 
 FROM node:lts-alpine
@@ -19,7 +19,7 @@ COPY --from=build-front /app/build/ ./public
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 

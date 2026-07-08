@@ -18,6 +18,7 @@ import { AppDetails } from './AppDetails/AppDetails';
 import { StyleSettings } from './StyleSettings/StyleSettings';
 import { GeneralSettings } from './GeneralSettings/GeneralSettings';
 import { DockerSettings } from './DockerSettings/DockerSettings';
+import { IconSettings } from './IconSettings/IconSettings';
 import { ProtectedRoute } from '../Routing/ProtectedRoute';
 
 // UI
@@ -69,6 +70,7 @@ export const Settings = (): JSX.Element => {
               path="/settings/docker"
               component={DockerSettings}
             />
+            <ProtectedRoute path="/settings/icons" component={IconSettings} />
             <ProtectedRoute path="/settings/css" component={StyleSettings} />
             <Route path="/settings/app" component={AppDetails} />
           </Switch>

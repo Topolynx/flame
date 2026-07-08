@@ -10,7 +10,7 @@ import { actionCreators } from '../../../store';
 import { Bookmark, Category, NewBookmark } from '../../../interfaces';
 
 // UI
-import { ModalForm, InputGroup, Button } from '../../UI';
+import { ModalForm, InputGroup, Button, IconPicker } from '../../UI';
 
 // CSS
 import classes from './Form.module.css';
@@ -225,6 +225,16 @@ export const BookmarksForm = ({
               Click here for reference
             </a>
           </span>
+          <IconPicker
+            value={formData.icon}
+            onChange={(icon) => {
+              setCustomIcon(null);
+              setFormData({
+                ...formData,
+                icon,
+              });
+            }}
+          />
           <span
             onClick={() => toggleUseCustomIcon(!useCustomIcon)}
             className={classes.Switch}
@@ -241,7 +251,7 @@ export const BookmarksForm = ({
             name="icon"
             id="icon"
             onChange={(e) => fileChangeHandler(e)}
-            accept=".jpg,.jpeg,.png,.svg,.ico"
+            accept=".jpg,.jpeg,.png,.svg,.webp,.ico"
           />
           <span
             onClick={() => {

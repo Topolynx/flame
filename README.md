@@ -214,6 +214,13 @@ curl http://${IP}:${PORT}/version
 
 ### Kubernetes integration
 
+The Kubernetes client is optional to keep the default Flame install lightweight.
+Install it only on instances that use Kubernetes discovery:
+
+```sh
+npm install @kubernetes/client-node
+```
+
 In order to use the Kubernetes integration, each ingress must have the following annotations:
 
 ```yml

@@ -18,7 +18,7 @@ export const AppCard = ({ app }: Props): JSX.Element => {
   let iconEl: JSX.Element;
   const { icon } = app;
 
-  if (isImage(icon)) {
+  if (isImage(icon) || isSvg(icon)) {
     const source = isUrl(icon) ? icon : `/uploads/${icon}`;
 
     iconEl = (
@@ -27,18 +27,6 @@ export const AppCard = ({ app }: Props): JSX.Element => {
         alt={`${app.name} icon`}
         className={classes.CustomIcon}
       />
-    );
-  } else if (isSvg(icon)) {
-    const source = isUrl(icon) ? icon : `/uploads/${icon}`;
-
-    iconEl = (
-      <div className={classes.CustomIcon}>
-        <svg
-          data-src={source}
-          fill="var(--color-primary)"
-          className={classes.CustomIcon}
-        ></svg>
-      </div>
     );
   } else {
     iconEl = <Icon icon={iconParser(icon)} />;

@@ -1,4 +1,8 @@
 node_modules
 data
+data.*
+data.before-*
 public
 !client/public
+docker-compose.yml
+docker-compose.*.yml

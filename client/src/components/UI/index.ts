@@ -11,6 +11,7 @@ export * from './Headlines/Headline/Headline';
 export * from './Headlines/SectionHeadline/SectionHeadline';
 export * from './Headlines/SettingsHeadline/SettingsHeadline';
 export * from './Forms/InputGroup/InputGroup';
+export * from './Forms/IconPicker/IconPicker';
 export * from './Forms/ModalForm/ModalForm';
 export * from './Buttons/ActionButton/ActionButton';
 export * from './Buttons/Button/Button';

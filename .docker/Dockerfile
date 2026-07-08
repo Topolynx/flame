@@ -1,17 +1,17 @@
-FROM node:20-alpine as builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
 
 RUN apk --no-cache --virtual build-dependencies add python3 make g++ \
-    && npm install --production
+    && npm ci --omit=dev
 
 COPY . .
 
 RUN mkdir -p ./public ./data \
     && cd ./client \
-    && npm install --production \
+    && npm ci \
     && npm run build \
     && cd .. \
     && mv ./client/build/* ./public \
@@ -26,6 +26,5 @@ WORKDIR /app
 EXPOSE 5005
 
 ENV NODE_ENV=production
-ENV PASSWORD=flame_password
 
-CMD ["sh", "-c", "chown -R node /app/data && node server.js"]
+CMD ["node", "server.js"]

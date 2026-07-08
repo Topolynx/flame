@@ -12,7 +12,7 @@ services:
     # secrets:
     #   - password # optional but required for (1)
     environment:
-      - PASSWORD=flame_password
+      - PASSWORD=change_me
       # - PASSWORD_FILE=/run/secrets/password # optional but required for (1)
     restart: unless-stopped
     

@@ -1,0 +1,99 @@
+.IconActions {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.UploadRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.UploadRow input {
+  min-width: 0;
+}
+
+.Message {
+  color: var(--color-primary);
+  font-size: 0.85em;
+}
+
+.IconGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.IconItem {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-accent);
+}
+
+.Preview {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+}
+
+.IconMeta {
+  min-width: 0;
+}
+
+.IconName {
+  color: var(--color-primary);
+  overflow-wrap: anywhere;
+}
+
+.IconSize {
+  color: var(--color-accent);
+  display: block;
+  font-size: 0.8em;
+  margin-top: 2px;
+}
+
+.EditRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.EditRow input {
+  min-width: 0;
+  border: none;
+  border-radius: 4px;
+  padding: 8px;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+.SmallButton,
+.DangerButton {
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-background);
+  color: var(--color-primary);
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+
+.SmallButton:hover,
+.DangerButton:hover {
+  cursor: pointer;
+  background-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+.DangerButton {
+  border-color: var(--color-primary);
+}
+
+@media (min-width: 700px) {
+  .IconGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
