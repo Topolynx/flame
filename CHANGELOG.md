@@ -1,3 +1,15 @@
+### v2.5.0-topolynx.1 (2026-07-09)
+- Fork release based on `pawelmalak/flame` v2.4.0.
+- Migrated the frontend build from Create React App to Vite while keeping React 17 and the original visual style.
+- Refreshed runtime dependencies where practical while preserving the lightweight architecture.
+- Added an authenticated icon manager in Settings for uploaded icons.
+- Added reusable uploaded-icon selection to app and bookmark forms.
+- Preserved uploaded icon filenames and added safer upload validation.
+- Made Kubernetes discovery optional so the default install stays smaller.
+- Removed the `external-svg-loader` runtime dependency and render uploaded SVG icons directly.
+- Hardened Dockerfiles by removing baked-in password defaults and switching Docker builds to `npm ci`.
+- Added local-data ignores for backups, Docker bind-mount data, and machine-specific compose files.
+
 ### v2.4.0 (2026-04-24)
 - Fixed high severity authentication security issues ([#465](https://github.com/pawelmalak/flame/issues/465))
 

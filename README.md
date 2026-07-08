@@ -2,6 +2,27 @@
 
 ![Homescreen screenshot](.github/home.png)
 
+## About This Fork
+
+This repository is a maintained personal fork of [pawelmalak/flame](https://github.com/pawelmalak/flame), originally created by Paweł Malak.
+
+The goal of this fork is to keep Flame lightweight and visually close to the original project while refreshing its tooling and adding a few practical self-hosting features.
+
+Current fork release: **v2.5.0-topolynx.1**
+
+### Notable Changes In This Fork
+
+- Frontend build migrated from Create React App to Vite.
+- Runtime dependencies refreshed conservatively.
+- Kubernetes discovery made optional to keep the default install lighter.
+- Uploaded SVG icons rendered directly without `external-svg-loader`.
+- New Settings > Icons page to view, upload, rename and delete uploaded icons.
+- App and bookmark forms can now select icons already present in `data/uploads`.
+- Uploaded icon filenames are preserved, with safer validation for supported image types.
+- Dockerfiles no longer bake a default password into the image.
+
+See [CHANGELOG.md](CHANGELOG.md) for release notes.
+
 ## Description
 
 Flame is self-hosted startpage for your server. Its design is inspired (heavily) by [SUI](https://github.com/jeroenpardon/sui). Flame is very easy to setup and use. With built-in editors, it allows you to setup your very own application hub in no time - no file editing necessary.
@@ -19,23 +40,17 @@ Flame is self-hosted startpage for your server. Its design is inspired (heavily)
 
 ### With Docker (recommended)
 
-[Docker Hub link](https://hub.docker.com/r/pawelmalak/flame)
+This fork does not currently publish official Docker Hub images. Build the image locally:
 
 ```sh
-docker pull pawelmalak/flame
-
-# for ARM architecture (e.g. RaspberryPi)
-docker pull pawelmalak/flame:multiarch
-
-# installing specific version
-docker pull pawelmalak/flame:2.0.0
+docker build -t flame-local:2.5.0-topolynx.1 -f .docker/Dockerfile .
 ```
 
 #### Deployment
 
 ```sh
 # run container
-docker run -p 5005:5005 -v /path/to/data:/app/data -e PASSWORD=change_me pawelmalak/flame
+docker run -p 5005:5005 -v /path/to/data:/app/data -e PASSWORD=change_me flame-local:2.5.0-topolynx.1
 ```
 
 #### Building images
@@ -59,7 +74,7 @@ version: '3.6'
 
 services:
   flame:
-    image: pawelmalak/flame
+    image: flame-local:2.5.0-topolynx.1
     container_name: flame
     volumes:
       - /path/to/host/data:/app/data
@@ -123,7 +138,7 @@ Follow instructions from wiki: [Installation without Docker](https://github.com/
 
 ```sh
 # clone repository
-git clone https://github.com/pawelmalak/flame
+git clone https://github.com/Topolynx/flame
 cd flame
 
 # run only once
@@ -234,6 +249,20 @@ metadata:
 
 > "Use Kubernetes Ingress API" option must be enabled for this to work. You can find it in Settings > Docker
 
+### Icon management
+
+Uploaded icons are stored in:
+
+```text
+data/uploads
+```
+
+Authenticated users can manage them from **Settings > Icons**. App and bookmark forms can also select icons already present in `data/uploads`, or upload a new one from the form.
+
+Uploaded filenames are preserved, so an uploaded file such as `nodered.png` or `portainer.svg` can be referenced by that exact name.
+
+Supported uploaded icon formats are SVG, PNG, JPG/JPEG, WebP and ICO.
+
 ### Import HTML Bookmarks (Experimental)
 
 - Requirements
@@ -253,3 +282,9 @@ python3 bookmarks_importer.py --bookmarks <path to bookmarks.html> --data <path 
 ### Custom CSS and themes
 
 See project wiki for [Custom CSS](https://github.com/pawelmalak/flame/wiki/Custom-CSS) and [Custom theme with CSS](https://github.com/pawelmalak/flame/wiki/Custom-theme-with-CSS).
+
+## Credits And License
+
+This fork is based on [pawelmalak/flame](https://github.com/pawelmalak/flame), originally created by Paweł Malak.
+
+Flame is distributed under the MIT License. The original copyright notice is preserved in [LICENSE.md](LICENSE.md), and additional fork notices are listed in [NOTICE.md](NOTICE.md).
