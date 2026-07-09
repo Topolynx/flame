@@ -16,7 +16,7 @@ Current fork release: **v2.5.0-topolynx.1**
 - Runtime dependencies refreshed conservatively.
 - Kubernetes discovery made optional to keep the default install lighter.
 - Uploaded SVG icons rendered directly without `external-svg-loader`.
-- New Settings > Icons page to view, upload, rename and delete uploaded icons.
+- New Settings > Icons page to view, upload, rename and delete uploaded icons from the web UI.
 - App and bookmark forms can now select icons already present in `data/uploads`.
 - Uploaded icon filenames are preserved, with safer validation for supported image types.
 - Dockerfiles no longer bake a default password into the image.
@@ -156,6 +156,8 @@ npm run dev
 ![Apps screenshot](.github/apps.png)
 
 ![Bookmark icon picker screenshot](.github/bookmark-icon-feature.png)
+
+![Icon manager screenshot](.github/icons-settings.png)
 
 ![Bookmarks screenshot](.github/bookmarks.png)
 

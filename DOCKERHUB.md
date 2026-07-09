@@ -12,6 +12,8 @@ This image is published from a maintained fork of [pawelmalak/flame](https://git
 
 ![Bookmark icon picker screenshot](https://raw.githubusercontent.com/Topolynx/flame/master/.github/bookmark-icon-feature.png)
 
+![Icon manager screenshot](https://raw.githubusercontent.com/Topolynx/flame/master/.github/icons-settings.png)
+
 ![Settings screenshot](https://raw.githubusercontent.com/Topolynx/flame/master/.github/settings.png)
 
 ## Tags
@@ -67,7 +69,7 @@ services:
 - Runtime dependencies refreshed conservatively.
 - Kubernetes discovery is optional to keep the default install lighter.
 - Uploaded SVG icons render directly without `external-svg-loader`.
-- New Settings > Icons page to view, upload, rename and delete uploaded icons.
+- New Settings > Icons page to view, upload, rename and delete uploaded icons from the web UI.
 - App and bookmark forms can select icons already present in `data/uploads`.
 - Uploaded icon filenames are preserved with safer upload validation.
 - Dockerfiles no longer bake a default password into the image.
