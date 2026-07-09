@@ -5,7 +5,7 @@ export const configTemplate: Config = {
   lat: 0,
   long: 0,
   isCelsius: true,
-  customTitle: 'Flame',
+  customTitle: 'FLAME',
   pinAppsByDefault: true,
   pinCategoriesByDefault: true,
   hideHeader: false,

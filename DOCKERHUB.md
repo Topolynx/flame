@@ -4,6 +4,16 @@ Lightweight self-hosted startpage for apps, bookmarks, search and Docker-discove
 
 This image is published from a maintained fork of [pawelmalak/flame](https://github.com/pawelmalak/flame), originally created by Paweł Malak and distributed under the MIT License.
 
+## Preview
+
+![Homescreen screenshot](https://raw.githubusercontent.com/Topolynx/flame/master/.github/home.png)
+
+![Apps screenshot](https://raw.githubusercontent.com/Topolynx/flame/master/.github/apps.png)
+
+![Bookmark icon picker screenshot](https://raw.githubusercontent.com/Topolynx/flame/master/.github/bookmark-icon-feature.png)
+
+![Settings screenshot](https://raw.githubusercontent.com/Topolynx/flame/master/.github/settings.png)
+
 ## Tags
 
 - `luciobt/flame:2.5.0`

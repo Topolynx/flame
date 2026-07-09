@@ -66,7 +66,7 @@ export const UISettings = (): JSX.Element => {
           type="text"
           id="customTitle"
           name="customTitle"
-          placeholder="Flame"
+          placeholder="FLAME"
           value={formData.customTitle}
           onChange={(e) => inputChangeHandler(e)}
         />

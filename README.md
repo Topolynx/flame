@@ -155,6 +155,8 @@ npm run dev
 
 ![Apps screenshot](.github/apps.png)
 
+![Bookmark icon picker screenshot](.github/bookmark-icon-feature.png)
+
 ![Bookmarks screenshot](.github/bookmarks.png)
 
 ![Settings screenshot](.github/settings.png)
